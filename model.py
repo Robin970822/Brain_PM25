@@ -2,6 +2,7 @@ import tensorflow as tf
 
 
 def get_model(input_shape, output_shape):
+    '''
     model = tf.keras.models.Sequential([
         tf.keras.layers.BatchNormalization(),
         tf.keras.layers.Conv2D(filters=4, kernel_size=3,
@@ -14,16 +15,16 @@ def get_model(input_shape, output_shape):
         tf.keras.layers.Dense(128, activation=tf.nn.relu),
         tf.keras.layers.Dense(output_shape, activation=tf.nn.softmax)
     ])
-
     '''
+
     model = tf.keras.models.Sequential([
         tf.keras.layers.BatchNormalization(),
         tf.keras.layers.Flatten(input_shape=input_shape),
         tf.keras.layers.Dense(128, activation=tf.nn.relu),
         tf.keras.layers.Dense(256, activation=tf.nn.relu),
+        tf.keras.layers.Dense(128, activation=tf.nn.relu),
         tf.keras.layers.Dense(output_shape, activation=tf.nn.softmax)
     ])
-    '''
 
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy',

@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from utils import *
+from utils import crop_from_img
 
 import numpy as np
 import nibabel as nib

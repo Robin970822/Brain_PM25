@@ -5,6 +5,7 @@ data_root = 'F:\\GitHub\\DICOM\\coordinate-07'
 pos_list = ['F:\\GitHub\\DICOM\\testData2\\20190309\\pos.npy',
             'F:\\GitHub\\DICOM\\testData2\\20190223\\pos.npy', 
             'F:\\GitHub\\DICOM\\testData2\\20190222\\pos.npy',
+            'F:\\GitHub\\DICOM\\testData2\\20190227\\pos.npy',
             'F:\\GitHub\\DICOM\\coordinate-07\\0710_60day_20190911_094509SWI\\pos.npy',
             'F:\\GitHub\\DICOM\\coordinate-07\\0710_60day_20190911_103001SWI\\pos.npy',
             'F:\\GitHub\\DICOM\\coordinate-07\\0710_60day_20190911_110457SWI\\pos.npy',

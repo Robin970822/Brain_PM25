@@ -14,3 +14,10 @@ import numpy as np
 import cv2
 ```
 
+# 实验结果
+|模型|数据集|acc|epoch|
+|:---:|:---:|:---:|:---:|
+|FC_h3_e1000.h5|Pos: 1518 Neg:1170|Pos: 0.9635 Neg:1.0000|1000|
+|CNN_h3_e1000.h5|Pos: 1518 Neg:1170|Pos: 0.9540 Neg:0.9966|1000|
+
+

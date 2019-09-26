@@ -50,3 +50,4 @@ model.evaluate(np.concatenate((pos_test, neg_test), axis=0), np.concatenate((pos
 
 model_path = os.path.join(config.model_path, args.output)
 model.save(model_path)
+print('Model has Saved in {} \n Dataset Pos: {} Neg:{}'.format(model_path, len(pos_train), len(neg_train)))

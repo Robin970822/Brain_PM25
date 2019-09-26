@@ -35,7 +35,7 @@ for i in range(frame_num):
     img_list = crop_from_img(img, img_mask)
     for j, img_slice in enumerate(img_list):
         # img_name = os.path.join(result_path, 'pos_{}_{}.png'.format(i, j))
-        plt.imshow(img_slice, cmap='bone')
+        # plt.imshow(img_slice, cmap='bone')
         # cv2.imwrite(img_name, img_slice)
         # plt.imsave(img_name, img_slice)
         pos.append(img_slice)

@@ -13,10 +13,8 @@ args = parser.parse_args()
 model_path = os.path.join(config.model_path, args.path)
 model = load_model(model_path)
 # Test Data
-pos_test = np.load(
-    'F:\\GitHub\\DICOM\\coordinate-07\\0710_60day_20190911_143703SWI\\pos.npy')
-neg_test = np.load(
-    'F:\\GitHub\\DICOM\\testData2\\20190309\\neg.npy')
+pos_test = np.load(config.pos_test)
+neg_test = np.load(config.neg_test)
 pos_test = pos_test[:, :, :, np.newaxis]
 neg_test = neg_test[:, :, :, np.newaxis]
 

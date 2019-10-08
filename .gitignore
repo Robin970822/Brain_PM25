@@ -1,11 +1,6 @@
-.idea/*
-SWI/*
-testdata/*
-testData2/*
-coordinate-07/*
-prog2/*
+data/*
 image/*
-发给萧阳/*
+test_code/*
 __pycache__/*
 
 *.nii

@@ -5,7 +5,7 @@ import argparse
 
 import numpy as np
 from model import get_model, load_model
-from utils import crop_from_img, generate_from_file_list
+from utils import generate_from_file_list
 
 # args
 parser = argparse.ArgumentParser()

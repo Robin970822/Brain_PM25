@@ -14,11 +14,11 @@ def get_train_data(matrix, mask_matrix, frame_num, data_type='pos'):
         img = matrix[:, :, i]
         img_mask = mask_matrix[:, :, i]
         if data_type == 'pos':
-            img_list = crop_from_img(img, img_mask)
+            img_list = crop_from_img(img, img_mask, pad=config.pad)
         elif data_type == 'neg':
             img_ROI = propose_region(img, is_debug=False)
             img_neg = img_ROI & (~img_mask)
-            img_list = crop_from_img(img, img_neg)
+            img_list = crop_from_img(img, img_neg, pad=config.pad)
         for img_slice in img_list:
             data.append(img_slice)
 

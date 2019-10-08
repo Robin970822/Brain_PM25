@@ -37,7 +37,7 @@ for i in tqdm(range(frame_num), desc='Detect'):
     img = matrix[:, :, i]
     mask_ROI = propose_region(img, is_debug)
     num, labels, stats, centroid = cv2.connectedComponentsWithStats(mask_ROI, connectivity=8)
-    pad = 5
+    pad = config.pad
     slice_list = []
     selected = np.zeros_like(img)
     selected_dict = {}

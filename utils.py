@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 
 
 # crop slice from img according to connected components in mask
-def crop_from_img(img, mask, pad=5, is_debug=False):
+def crop_from_img(img, mask, pad, is_debug=False):
     width, height = img.shape
     img_list = []
     mask = np.uint8(mask)

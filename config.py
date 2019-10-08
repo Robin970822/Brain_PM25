@@ -23,6 +23,7 @@ neg_list = ['F:\\GitHub\\DICOM\\data\\testData2\\20190223\\neg.npy',
 pos_test = 'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_143703SWI\\pos.npy'
 neg_test = 'F:\\GitHub\\DICOM\\data\\testData2\\20190309\\neg.npy'
 
+pad = 5
 
 def get_path(root=data_root, path='model'):
     model_path = os.path.join(root, path)

@@ -7,3 +7,5 @@ prog2/*
 image/*
 发给萧阳/*
 __pycache__/*
+
+*.nii

@@ -34,7 +34,7 @@ y_train = np.hstack((np.ones(len(pos_train)), np.zeros(len(neg_train))))
 pos_test = np.load(
     'F:\\GitHub\\DICOM\\coordinate-07\\0710_60day_20190911_143703SWI\\pos.npy')
 neg_test = np.load(
-    'F:\\GitHub\\DICOM\\coordinate-07\\0710_60day_20190911_143703SWI\\neg.npy')
+    'F:\\GitHub\\DICOM\\testData2\\20190309\\neg.npy')
 pos_test = pos_test[:, :, :, np.newaxis]
 neg_test = neg_test[:, :, :, np.newaxis]
 

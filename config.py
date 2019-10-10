@@ -33,3 +33,5 @@ def get_path(root=data_root, path='model'):
 
 
 model_path = get_path(path='model')
+image_path = get_path(path='image')
+mask_path = get_path(path='mask')

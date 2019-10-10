@@ -1,5 +1,6 @@
 data/*
 image/*
+mask/*
 test_code/*
 __pycache__/*
 

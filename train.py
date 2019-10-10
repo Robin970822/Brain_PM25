@@ -12,7 +12,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input', help='input path for model')
 parser.add_argument('-o', '--output', help='output path for model',
                     default='{}.h5'.format(time.time()))
-parser.add_argument('-m', '--model_type', help='model type', default='FC')
+parser.add_argument('-m', '--model', help='model type', default='FC')
+parser.add_argument(
+    '-e', '--epochs', help='number of training epochs', default=1500, type=int)
 args = parser.parse_args()
 
 # Training Data
@@ -44,9 +46,9 @@ if args.input:
     model = load_model(args.input)
 else:
     model = get_model(input_shape=(10, 10), output_shape=2,
-                      model_type=args.model_type)
+                      model_type=args.model)
 
-model.fit(x_train, y_train, epochs=1500, batch_size=256,
+model.fit(x_train, y_train, epochs=args.epochs, batch_size=256,
           validation_data=(pos_test, pos_y), validation_freq=100, verbose=1)
 
 # Evaluate

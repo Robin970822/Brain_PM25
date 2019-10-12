@@ -19,7 +19,7 @@ def crop_from_img(img, mask, pad, is_debug=False):
         if x == 0 and y == 0:
             continue
         cx, cy = np.uint8(center)
-        # crop a slice raound pickle
+        # crop a slice around pickle
         # valid bounder
         if cx - pad < 0 or cx + pad > height or cy - pad < 0 or cy + pad > width:
             print('cross bounder, label:{}, center:({},{})'.format(i, cx, cy))

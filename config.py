@@ -25,6 +25,7 @@ neg_test = 'F:\\GitHub\\DICOM\\data\\testData2\\20190309\\neg.npy'
 
 pad = 5
 
+
 def get_path(root=data_root, path='model'):
     model_path = os.path.join(root, path)
     if not os.path.exists(model_path):
@@ -34,4 +35,4 @@ def get_path(root=data_root, path='model'):
 
 model_path = get_path(path='model')
 image_path = get_path(path='image')
-mask_path = get_path(path='mask')
+result_path = get_path(path='result')

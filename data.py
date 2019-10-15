@@ -22,14 +22,14 @@ def get_train_data(matrix, mask_matrix, frame_num, data_type='pos'):
         for img_slice in img_list:
             data.append(img_slice)
 
-    npy_path = os.path.join(result_path, '{}.npy'.format(data_type))
+    npy_path = os.path.join(result_path, '{}_p{}.npy'.format(data_type, config.pad))
     np.save(npy_path, data)
     print('Write {} {} Data in {}'.format(len(data), data_type, npy_path))
     return data
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-t', '--data_type', default='p',
+parser.add_argument('-t', '--data_type', default='pos',
                     help='Type of data to get:\npos for positive\nneg for negative')
 parser.add_argument(
     '-d', '--data', default='0710_60day_20190911_110457SWI.nii', help='input file')

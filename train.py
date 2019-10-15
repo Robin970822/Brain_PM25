@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input', help='input path for model')
 parser.add_argument('-o', '--output', help='output path for model',
                     default='{}.h5'.format(time.time()))
-parser.add_argument('-m', '--model', help='model type', default='FC')
+parser.add_argument('-m', '--model', help='model type', default='CNN')
 parser.add_argument(
     '-e', '--epochs', help='number of training epochs', default=1500, type=int)
 args = parser.parse_args()
@@ -45,7 +45,7 @@ neg_y = np.zeros(len(neg_test))
 if args.input:
     model = load_model(args.input)
 else:
-    model = get_model(input_shape=(10, 10), output_shape=2,
+    model = get_model(input_shape=(20, 20), output_shape=2,
                       model_type=args.model)
 
 model.fit(x_train, y_train, epochs=args.epochs, batch_size=256,

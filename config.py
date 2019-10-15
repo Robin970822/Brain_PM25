@@ -2,28 +2,28 @@ import os
 
 data_root = 'F:\\GitHub\\DICOM\\data\\coordinate-07'
 
-pos_list = ['F:\\GitHub\\DICOM\\data\\testData2\\20190309\\pos.npy',
-            'F:\\GitHub\\DICOM\\data\\testData2\\20190223\\pos.npy',
-            'F:\\GitHub\\DICOM\\data\\testData2\\20190222\\pos.npy',
-            'F:\\GitHub\\DICOM\\data\\testData2\\20190227\\pos.npy',
-            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_094509SWI\\pos.npy',
-            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_103001SWI\\pos.npy',
-            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_110457SWI\\pos.npy',
-            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_115808SWI\\pos.npy',
-            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_123842SWI\\pos.npy',
-            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_131949SWI\\pos.npy',
-            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_135955SWI\\pos.npy', ]
+pos_list = ['F:\\GitHub\\DICOM\\data\\testData2\\20190309\\pos_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\testData2\\20190223\\pos_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\testData2\\20190222\\pos_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\testData2\\20190227\\pos_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_094509SWI\\pos_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_103001SWI\\pos_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_110457SWI\\pos_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_115808SWI\\pos_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_123842SWI\\pos_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_131949SWI\\pos_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_135955SWI\\pos_p10.npy', ]
 
-neg_list = ['F:\\GitHub\\DICOM\\data\\testData2\\20190223\\neg.npy',
-            'F:\\GitHub\\DICOM\\data\\testData2\\20190222\\neg.npy',
-            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_110457SWI\\neg.npy',
-            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_103001SWI\\neg.npy',
-            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_094509SWI\\neg.npy']
+neg_list = ['F:\\GitHub\\DICOM\\data\\testData2\\20190223\\neg_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\testData2\\20190222\\neg_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_110457SWI\\neg_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_103001SWI\\neg_p10.npy',
+            'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_094509SWI\\neg_p10.npy']
 
-pos_test = 'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_143703SWI\\pos.npy'
-neg_test = 'F:\\GitHub\\DICOM\\data\\testData2\\20190309\\neg.npy'
+pos_test = 'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_143703SWI\\pos_p10.npy'
+neg_test = 'F:\\GitHub\\DICOM\\data\\testData2\\20190309\\neg_p10.npy'
 
-pad = 5
+pad = 10
 
 
 def get_path(root=data_root, path='model'):

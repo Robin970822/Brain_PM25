@@ -22,7 +22,8 @@ def get_train_data(matrix, mask_matrix, frame_num, data_type='pos'):
         for img_slice in img_list:
             data.append(img_slice)
 
-    npy_path = os.path.join(result_path, '{}_p{}.npy'.format(data_type, config.pad))
+    npy_path = os.path.join(
+        result_path, '{}_p{}.npy'.format(data_type, config.pad))
     np.save(npy_path, data)
     print('Write {} {} Data in {}'.format(len(data), data_type, npy_path))
     return data
@@ -57,6 +58,5 @@ width, height, frame_num = data.shape
 
 matrix = data.get_data()
 mask_matrix = mask.get_data()
-
 
 get_train_data(matrix, mask_matrix, frame_num, data_type=args.data_type)

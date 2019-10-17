@@ -24,7 +24,7 @@ pos_test = 'F:\\GitHub\\DICOM\\data\\coordinate-07\\0710_60day_20190911_143703SW
 neg_test = 'F:\\GitHub\\DICOM\\data\\testData2\\20190309\\neg_p10.npy'
 
 pad = 10
-data_balance = 1    # 0 for no balance, k for pos:neg = 1:k
+data_balance = 2    # 0 for no balance, k for pos:neg = 1:k
 
 
 def get_path(root=data_root, path='model'):

@@ -7,10 +7,10 @@ from model import load_model
 
 # args
 parser = argparse.ArgumentParser()
-parser.add_argument('-p', '--path', help='model path', default='FC_h3_e1000.h5')
+parser.add_argument('-m', '--model_path', help='model path')
 args = parser.parse_args()
 
-model_path = os.path.join(config.model_path, args.path)
+model_path = os.path.join(config.model_path, args.model_path)
 model = load_model(model_path)
 # Test Data
 pos_test = np.load(config.pos_test)

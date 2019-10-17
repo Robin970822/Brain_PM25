@@ -12,7 +12,28 @@ import config
 import argparse
 
 
+def detect_file(filename, model, pad=config.pad, is_debug=False):
+    data = nib.load(filename)
+    mask = nib.load(filename)
+    mask_roi = nib.load(filename)
+
+    width, height, frame_num = data.shape
+    matrix = data.get_data()
+
+    start = time.time()
+    for i in tqdm(range(frame_num), desc='Detect in {}'.format(os.path.basename(filename))):
+        img = matrix[:, :, i]
+        selected, mask_ROI = detect(img, model)
+        mask.get_data()[:, :, i] = selected
+        mask_roi.get_data()[:, :, i] = mask_ROI
+    end = time.time()
+
+    print('Using time {}s'.format(end - start))
+    return mask, mask_roi
+
+
 def detect(img, model, pad=config.pad, is_debug=False):
+    width, height = img.shape
     mask_ROI = propose_region(img, is_debug)
     num, labels, stats, centroid = cv2.connectedComponentsWithStats(
         mask_ROI, connectivity=8)
@@ -41,43 +62,31 @@ def detect(img, model, pad=config.pad, is_debug=False):
     return selected, mask_ROI
 
 
-data_root = config.data_root
-model_path = config.model_path
-result_path = config.result_path
+if __name__ == '__main__':
+    data_root = config.data_root
+    model_path = config.model_path
+    result_path = config.result_path
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-i', '--input', help='input path')
-parser.add_argument('-o', '--output', help='output path', default='test.nii')
-parser.add_argument('-m', '--model', help='model path',
-                    default='CNN_h3_e1500.h5')
-args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input', help='input path')
+    parser.add_argument('-o', '--output', help='output path')
+    parser.add_argument('-m', '--model', help='model path',
+                        default='CNN_h3_e1500.h5')
+    args = parser.parse_args()
 
-data_filename = args.input
-data_path = os.path.join(data_root, data_filename)
+    data_filename = args.input
+    data_path = os.path.join(data_root, data_filename)
 
-result_filename = args.output
-result_path = os.path.join(result_path, result_filename)
+    result_filename = args.output if args.output else '{}_detect.nii'.format(
+        data_filename.split('/')[-1].split('.')[-2])
 
-model_name = args.model
-model_path = os.path.join(model_path, model_name)
-model = load_model(model_path)
+    result_path = os.path.join(result_path, result_filename)
 
-data = nib.load(data_path)
-mask = nib.load(data_path)
-mask_roi = nib.load(data_path)
+    model_name = args.model
+    model_path = os.path.join(model_path, model_name)
+    model = load_model(model_path)
 
-width, height, frame_num = data.shape
-matrix = data.get_data()
+    mask, mask_roi = detect_file(data_path, model)
 
-start = time.time()
-for i in tqdm(range(frame_num), desc='Detect'):
-    img = matrix[:, :, i]
-    selected, mask_ROI = detect(img, model)
-    mask.get_data()[:, :, i] = selected
-    mask_roi.get_data()[:, :, i] = mask_ROI
-end = time.time()
-
-print('Using time {}s'.format(end - start))
-
-nib.save(mask, result_path)
-nib.save(mask_roi, './mask/roi.nii')
+    nib.save(mask, result_path)
+    nib.save(mask_roi, './mask/roi.nii')

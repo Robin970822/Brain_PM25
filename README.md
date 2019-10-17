@@ -2,11 +2,55 @@
 - config.py:		训练参数设置
 - utils.py:			图像处理工具
 - data.py:			从nii数据文件中获取训练集和测试集
-- model.py:			模型定义及读写
-- train.py:			模型训练
+- model.py:         模型定义及读写
+- train.py:         模型训练
 - eval.py:			分类模型检验
 - detect.py:		检测PM2.5颗粒
 - eval_detect.py:	检测模型检验		# TODO
+
+# 实验过程
+
+## 获取数据
+```bash
+python data.py -t [data_type] -d [data] -m [mask]
+```
+- data_type:    pos: 正例，neg: 负例
+- data:         数据源，.nii文件或.dicom文件
+- mask:         点标注文件
+
+## 训练
+```shell
+python train.py -i [input] -o [output] -m [model] -e [epoch]
+```
+- input:    预训练模型，可缺省
+- output:   输出模型
+- model:    模型类型：FC、CNN
+- epoch:    训练epoch
+
+## 验证分类结果
+```shell
+python eval.py -m [model_path]
+```
+- model_path:   验证模型路径
+
+## 验证检测结果
+
+TODO
+
+## 检测PM2.5
+```
+python detect.py -i [input] -o [output] -m [model] 
+```
+- input:    输入数据
+- output:   输出预测
+- model:    模型
+
+## 批量检测PM2.5
+```
+python batch_detect.py -i [input] -m [model] 
+```
+- input:    输入数据
+- model:    模型
 
 # 实验结果
 ## 分类结果

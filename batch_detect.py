@@ -15,7 +15,7 @@ result_path = config.result_path
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input', help='input path')
 parser.add_argument('-m', '--model', help='model path',
-                    default='CNN_h3_e1500.h5')
+                    default='CNN_p10_e2000.h5')
 args = parser.parse_args()
 
 model_name = args.model

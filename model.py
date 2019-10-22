@@ -1,7 +1,11 @@
 import tensorflow as tf
+from tensorflow.keras.backend import set_session
 
 
 def get_model(input_shape, output_shape, model_type='FC'):
+    config = tf.ConfigProto()
+    config.gpu_options.per_process_gpu_memory_fraction = 0.3
+    set_session(tf.Session(config=config))
     if model_type == 'FC':
         model = tf.keras.models.Sequential([
             tf.keras.layers.BatchNormalization(),

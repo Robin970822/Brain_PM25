@@ -56,12 +56,13 @@ python batch_detect.py -i [input] -m [model]
 ## 分类结果
 |模型|数据集|acc|epoch|
 |:---:|:---:|:---:|:---:|
-|FC_h3_e1000.h5|Pos: 1518 Neg:1170|Pos: 0.9635 Neg:1.0000|1000|
-|CNN_h3_e1000.h5|Pos: 1518 Neg:1170|Pos: 0.9540 Neg:0.9966|1000|
-|FC_p10_e1500.h5|Pos: 1500 Neg:6000|Pos: 0.8321 Neg:0.9276|1500|
-|CNN_p10_e1500.h5|Pos: 1500 Neg:6000|Pos: 0.8829 Neg:0.9423|1500|
-|CNN_p10_e1500_balanced.h5|Pos: 1500 Neg:1500|Pos: 0.9311 Neg:0.7959|1500|
-|CNN_p10_e1500_balanced.h5|Pos: 1500 Neg:1500|Pos: 0.9004 Neg:0.8978|1500|
+|FC_h3_e1000.h5|Pos: 1518 Neg: 1170|Pos: 0.9635 Neg: 1.0000|1000|
+|CNN_h3_e1000.h5|Pos: 1518 Neg: 1170|Pos: 0.9540 Neg: 0.9966|1000|
+|FC_p10_e1500.h5|Pos: 1500 Neg: 6000|Pos: 0.8321 Neg: 0.9276|1500|
+|CNN_p10_e1500.h5|Pos: 1500 Neg: 6000|Pos: 0.8829 Neg: 0.9423|1500|
+|CNN_p10_e3000.h5|Pos: 1500 Neg: 6000|Pos: 0.9081 Neg: 0.9527|3000|
+|CNN_p10_e1500_balanced.h5|Pos: 1500 Neg: 1500|Pos: 0.9311 Neg: 0.7959|1500|
+|CNN_p10_e1500_balanced_2.h5|Pos: 1500 Neg: 3000|Pos: 0.9004 Neg: 0.8978|1500|
 
 ## 检测结果
 

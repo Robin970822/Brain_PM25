@@ -27,6 +27,12 @@ neg_list = config.neg_list
 pos_train = generate_from_file_list(pos_list)
 neg_train = generate_from_file_list(neg_list)
 
+np.random.shuffle(neg_train)
+
+if not config.data_balance == 0:
+    neg_train = neg_train[np.random.choice(len(neg_train), int(
+        len(pos_train) * config.data_balance * np.random.uniform(0.5, 1.5)))]
+
 print('\nPos: {} Neg: {}\n'.format(len(pos_train), len(neg_train)))
 
 x_train = np.concatenate((pos_train, neg_train), axis=0)

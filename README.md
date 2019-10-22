@@ -39,7 +39,7 @@ TODO
 
 ## 检测PM2.5
 ```
-python detect.py -i [input] -o [output] -m [model] 
+python detect.py -i [input] -o [output] -m [model]
 ```
 - input:    输入数据
 - output:   输出预测
@@ -47,7 +47,7 @@ python detect.py -i [input] -o [output] -m [model]
 
 ## 批量检测PM2.5
 ```
-python batch_detect.py -i [input] -m [model] 
+python batch_detect.py -i [input] -m [model]
 ```
 - input:    输入数据
 - model:    模型

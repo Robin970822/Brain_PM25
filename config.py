@@ -16,6 +16,7 @@ pos_test = config_dict['pos_test']
 neg_test = config_dict['neg_test']
 
 pad = config_dict['pad']
+data_balance = config_dict['data_balance']
 
 
 def get_path(root=data_root, path='model'):

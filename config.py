@@ -5,7 +5,7 @@ import json
 with open('config.json', 'r') as jobj:
     config_dict = json.load(jobj)
 
-print(config_dict)
+#print(config_dict)
 
 data_root = config_dict['data_root']
 
@@ -14,8 +14,8 @@ pos_list = config_dict['pos_list']
 neg_list = config_dict['neg_list']
 
 # validate data
-pos_test = config_dict['pos_list']
-neg_test = config_dict['neg_list']
+pos_test = config_dict['pos_test']
+neg_test = config_dict['neg_test']
 
 pad = 10
 data_balance = 2    # 0 for no balance, k for pos:neg = 1:k

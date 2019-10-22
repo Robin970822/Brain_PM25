@@ -17,6 +17,7 @@ parser.add_argument(
     '-e', '--epochs', help='number of training epochs', default=1500, type=int)
 args = parser.parse_args()
 
+print('\nReading Data...\n')
 # Training Data
 pos_list = config.pos_list
 neg_list = config.neg_list
@@ -30,7 +31,7 @@ if not config.data_balance == 0:
     neg_train = neg_train[np.random.choice(
         len(neg_train), int(len(pos_train) * config.data_balance))]
 
-print('Pos: {} Neg: {}'.format(len(pos_train), len(neg_train)))
+print('\nPos: {} Neg: {}\n'.format(len(pos_train), len(neg_train)))
 
 x_train = np.concatenate((pos_train, neg_train), axis=0)
 y_train = np.hstack((np.ones(len(pos_train)), np.zeros(len(neg_train))))
@@ -44,22 +45,31 @@ neg_test = neg_test[:, :, :, np.newaxis]
 pos_y = np.ones(len(pos_test))
 neg_y = np.zeros(len(neg_test))
 
+print('\nReading Data Done.\n')
+
 # Train
+# Load Model
+print('\nTrainging Begin\n')
+print('Loading Model...')
 if args.input:
     model = load_model(args.input)
 else:
     model = get_model(input_shape=(20, 20), output_shape=2,
                       model_type=args.model)
-
+# Train
+print('Trainging...')
 model.fit(x_train, y_train, epochs=args.epochs, batch_size=256,
           validation_data=(pos_test, pos_y), validation_freq=100, verbose=1)
 
 # Evaluate
+print('Evaluating...')
 model.evaluate(pos_test, pos_y)
 model.evaluate(neg_test, neg_y)
 model.evaluate(np.concatenate((pos_test, neg_test), axis=0),
                np.concatenate((pos_y, neg_y), axis=0))
 
+# Save Model
+print('Saving Model...')
 model_path = os.path.join(config.model_path, args.output)
 model.save(model_path)
 print('Model has Saved in {} \n Dataset Pos: {} Neg:{}'.format(

@@ -5,8 +5,6 @@ import json
 with open('config.json', 'r') as jobj:
     config_dict = json.load(jobj)
 
-#print(config_dict)
-
 data_root = config_dict['data_root']
 
 # training data

@@ -5,7 +5,6 @@ import argparse
 
 import numpy as np
 
-from sklearn.utils import class_weight
 from model import get_model, load_model
 from utils import generate_from_file_list
 
@@ -31,7 +30,7 @@ np.random.shuffle(neg_train)
 
 if not config.data_balance == 0:
     neg_train = neg_train[np.random.choice(len(neg_train), int(
-        len(pos_train) * config.data_balance * np.random.uniform(0.5, 1.5)))]
+        len(pos_train) * config.data_balance))]
 
 print('\nPos: {} Neg: {}\n'.format(len(pos_train), len(neg_train)))
 
@@ -61,11 +60,7 @@ else:
 # Train
 print('Trainging...')
 
-class_weights = class_weight.compute_class_weight(
-    'balanced', np.unique(y_train), y_train)
-print(class_weights)
-
-model.fit(x_train, y_train, epochs=args.epochs, batch_size=256, class_weight=class_weights,
+model.fit(x_train, y_train, epochs=args.epochs, batch_size=256,
           validation_data=(pos_test, pos_y), validation_freq=100, verbose=1)
 
 # Evaluate

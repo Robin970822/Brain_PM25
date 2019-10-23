@@ -5,9 +5,8 @@ import argparse
 
 import numpy as np
 
-from sklearn.utils import class_weight
 from model import get_model, load_model
-from utils import generate_from_file_list
+from utils import generate_from_file_list, random_shuffle, augmentation
 
 # args
 parser = argparse.ArgumentParser()
@@ -27,22 +26,25 @@ neg_list = config.neg_list
 pos_train = generate_from_file_list(pos_list)
 neg_train = generate_from_file_list(neg_list)
 
+np.random.shuffle(pos_train)
 np.random.shuffle(neg_train)
 
 if not config.data_balance == 0:
     neg_train = neg_train[np.random.choice(len(neg_train), int(
-        len(pos_train) * config.data_balance * np.random.uniform(0.5, 1.5)))]
+        len(pos_train) * config.data_balance))]
 
 print('\nPos: {} Neg: {}\n'.format(len(pos_train), len(neg_train)))
 
 x_train = np.concatenate((pos_train, neg_train), axis=0)
 y_train = np.hstack((np.ones(len(pos_train)), np.zeros(len(neg_train))))
 
+# shuffle and augmentation
+x_train, y_train = random_shuffle(x_train, y_train)
+x_train = augmentation(x_train)
+
 # Test Data
-pos_test = np.load(config.pos_test)
-neg_test = np.load(config.neg_test)
-pos_test = pos_test[:, :, :, np.newaxis]
-neg_test = neg_test[:, :, :, np.newaxis]
+pos_test = generate_from_file_list([config.pos_test])
+neg_test = generate_from_file_list([config.neg_test])
 
 pos_y = np.ones(len(pos_test))
 neg_y = np.zeros(len(neg_test))
@@ -53,19 +55,16 @@ print('\nReading Data Done.\n')
 # Load Model
 print('\nTrainging Begin\n')
 print('Loading Model...')
+pad = config.pad
 if args.input:
     model = load_model(args.input)
 else:
-    model = get_model(input_shape=(20, 20), output_shape=2,
+    model = get_model(input_shape=(2*pad, 2*pad), output_shape=2,
                       model_type=args.model)
 # Train
 print('Trainging...')
 
-class_weights = class_weight.compute_class_weight(
-    'balanced', np.unique(y_train), y_train)
-print(class_weights)
-
-model.fit(x_train, y_train, epochs=args.epochs, batch_size=256, class_weight=class_weights,
+model.fit(x_train, y_train, epochs=args.epochs, batch_size=256,
           validation_data=(pos_test, pos_y), validation_freq=100, verbose=1)
 
 # Evaluate

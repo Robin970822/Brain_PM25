@@ -68,7 +68,31 @@ def propose_region(img, is_debug):
     return threshold & mask & (~vh_img)
 
 
+# generate dataset from file list
 def generate_from_file_list(file_list):
     data = np.concatenate(tuple([np.load(f) for f in file_list]), axis=0)
     data = data[:, :, :, np.newaxis]
+    return data
+
+
+# random shuffle dataset
+def random_shuffle(data, label):
+    assert data.shape[0] == label.shape[0]
+    sample_length = data.shape[0]
+    index = list(range(sample_length))
+    np.random.shuffle(index)
+    data = data[index]
+    label = label[index]
+    return data, label
+
+
+# dataset augmentation
+def augmentation(data, threshold=0.8):
+    sample_length = data.shape[0]
+    for i in range(sample_length):
+        # flip
+        if np.random.random() > threshold:
+            img = data[i].copy()
+            data[i] = np.reshape(
+                cv2.flip(img, flipCode=np.random.randint(-1, 1)), img.shape)
     return data

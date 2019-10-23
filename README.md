@@ -61,8 +61,10 @@ python batch_detect.py -i [input] -m [model]
 |FC_p10_e1500.h5|Pos: 1500 Neg: 6000|Pos: 0.8321 Neg: 0.9276|1500|
 |CNN_p10_e1500.h5|Pos: 1500 Neg: 6000|Pos: 0.8829 Neg: 0.9423|1500|
 |CNN_p10_e3000.h5|Pos: 1500 Neg: 6000|Pos: 0.9081 Neg: 0.9527|3000|
+|CNN_p10_e5000.h5|Pos: 1500 Neg: 6000|Pos: 0.8906 Neg: 0.9552|5000|
 |CNN_p10_e1500_balanced.h5|Pos: 1500 Neg: 1500|Pos: 0.9311 Neg: 0.7959|1500|
 |CNN_p10_e1500_balanced_2.h5|Pos: 1500 Neg: 3000|Pos: 0.9004 Neg: 0.8978|1500|
+|CNN_p10_e2000_balanced_2.h5|Pos: 1500 Neg: 3000|Pos: 0.9157 Neg: 0.9033|2000|
 
 ## 检测结果
 

@@ -1,4 +1,7 @@
+[TOC]
+
 # 文件结构
+
 - config.py:		训练参数设置
 - utils.py:			图像处理工具
 - data.py:			从nii数据文件中获取训练集和测试集

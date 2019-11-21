@@ -32,9 +32,8 @@ def crop_from_img(img, mask, pad, is_debug=False):
         img_list.append(slice_img)
     return img_list
 
+
 # propose region from image
-
-
 def propose_region(img, is_debug):
     img = np.uint8(img)
     mask = np.zeros_like(img)

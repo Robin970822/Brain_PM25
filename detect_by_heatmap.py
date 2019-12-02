@@ -1,4 +1,4 @@
-from utils import propose_region, unet_predict
+from utils import unet_predict
 from model import load_model
 from tqdm import tqdm
 

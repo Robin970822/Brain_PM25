@@ -1,9 +1,25 @@
 import cv2
-import os
 import numpy as np
-from model import unet
-from config import model_path
 from matplotlib import pyplot as plt
+
+
+# min max scaler
+def min_max_scaler(a):
+    return (a - np.min(a)) / (np.max(a) - np.min(a))
+
+
+# crop roi for unet prediction
+def crop_roi(img):
+    test_img = np.rot90(min_max_scaler(img))
+    crop_img = test_img[130:130 + 160, 50:50 + 224]
+    return crop_img
+
+
+# resize crop roi to full image
+def resize_img(crop, img_shape=(300, 300)):
+    mask = np.zeros(img_shape)
+    mask[130:130 + 160, 50:50 + 224] = crop
+    return np.rot90(mask, 3)
 
 
 # crop slice from img according to connected components in mask
@@ -36,11 +52,13 @@ def crop_from_img(img, mask, pad, is_debug=False):
 
 
 # propose region from image
-def propose_region(img, is_debug):
+def propose_region(img, unet=None, is_debug=False):
     img = np.uint8(img)
     mask = np.zeros_like(img)
     # BET
-    bet = unet_predict(img, threshold=0.2)
+    if unet:
+        bet = unet_predict(img, unet, threshold=0.2)
+        bet = np.uint8(bet)
 
     # Adaptive Threshold
     threshold = cv2.adaptiveThreshold(
@@ -71,7 +89,10 @@ def propose_region(img, is_debug):
     if is_debug:
         plt.imshow(vh_img, cmap='bone')
 
-    return threshold & bet & mask & (~vh_img)
+    if unet:
+        return threshold & bet & mask & (~vh_img)
+    else:
+        return threshold & mask & (~vh_img)
 
 
 # generate dataset from file list
@@ -104,16 +125,11 @@ def augmentation(data, threshold=0.8):
     return data
 
 
-def unet_predict(img, threshold=0.5, model_name='unet_BET2.hdf5'):
-    # load unet
-    unet_path = os.path.join(model_path, model_name)
-    model = unet()
-    model.load_weights(unet_path)
-
+# unet predict
+def unet_predict(img, model, threshold=0.5):
     # crop img
-    test_img = img.copy()
-    test_img = np.rot90((test_img - np.min(test_img)) / (np.max(test_img) - np.min(test_img)))
-    crop_img = test_img[120:120 + 160, 50:50 + 224]
+    h, w = img.shape
+    crop_img = crop_roi(img)
     crop_img = np.reshape(crop_img, crop_img.shape + (1,))
     crop_img = np.reshape(crop_img, (1,) + crop_img.shape)
 
@@ -124,6 +140,26 @@ def unet_predict(img, threshold=0.5, model_name='unet_BET2.hdf5'):
     r[res > threshold] = 1
 
     # mask
-    mask = np.zeros_like(np.rot90(img))
-    mask[120:120 + 160, 50:50 + 224] = r
-    return np.rot90(mask, 3)
+    return resize_img(r, (w, h))
+
+
+# unet batch predict
+def unet_batch_predict(img_batch, model, threshold=0.5):
+    # img_batch: [batch w, h]
+    batch, h, w = img_batch.shape
+    crop_batch = []
+    for img in img_batch:
+        crop_img = crop_roi(img)
+        crop_batch.append(crop_img)
+    crop_batch = np.array(crop_batch)
+    crop_batch = np.reshape(crop_batch, crop_batch.shape + (1,))
+
+    # predict res
+    res = model.predict_on_batch(crop_batch)
+    res = np.squeeze(res)
+    r_batch = np.zeros_like(res)
+    r_batch[res > threshold] = 1
+
+    # mask_batch: [batch, w, h]
+    mask_batch = [resize_img(r, (w, h)) for r in r_batch]
+    return mask_batch

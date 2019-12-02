@@ -1,5 +1,5 @@
 from utils import propose_region
-from model import load_model
+from model import load_model, unet
 from tqdm import tqdm
 
 import numpy as np
@@ -12,7 +12,7 @@ import config
 import argparse
 
 
-def detect_file(filename, model):
+def detect_file(filename, model, bet):
     data = nib.load(filename)
     mask = nib.load(filename)
     mask_roi = nib.load(filename)
@@ -23,7 +23,7 @@ def detect_file(filename, model):
     start = time.time()
     for i in tqdm(range(frame_num), desc='Detect in {}'.format(os.path.basename(filename))):
         img = matrix[:, :, i]
-        selected, mask_ROI = detect(img, model)
+        selected, mask_ROI = detect(img, model, bet)
         mask.get_data()[:, :, i] = selected
         mask_roi.get_data()[:, :, i] = mask_ROI
     end = time.time()
@@ -32,9 +32,9 @@ def detect_file(filename, model):
     return mask, mask_roi
 
 
-def detect(img, model, pad=config.pad, is_debug=False):
+def detect(img, model, bet, pad=config.pad, is_debug=False):
     width, height = img.shape
-    mask_ROI = propose_region(img, is_debug)
+    mask_ROI = propose_region(img, bet, is_debug)
     num, labels, stats, centroid = cv2.connectedComponentsWithStats(
         mask_ROI, connectivity=8)
     selected = np.zeros_like(img)
@@ -83,10 +83,11 @@ if __name__ == '__main__':
     result_path = os.path.join(result_path, result_filename)
 
     model_name = args.model
-    model_path = os.path.join(model_path, model_name)
-    model = load_model(model_path)
+    unet_path = os.path.join(model_path, 'unet_BET2.hdf5')
+    clf_path = os.path.join(model_path, model_name)
+    model = load_model(clf_path)
 
-    mask, mask_roi = detect_file(data_path, model)
+    mask, mask_roi = detect_file(data_path, model, unet(pretrained_weights=unet_path))
 
     nib.save(mask, result_path)
     nib.save(mask_roi, './mask/roi.nii')

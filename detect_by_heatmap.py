@@ -1,5 +1,5 @@
-from utils import unet_predict
-from model import load_model
+from utils import bet_unet
+from model import load_model, unet
 from tqdm import tqdm
 
 import numpy as np
@@ -12,18 +12,20 @@ import config
 import argparse
 
 
-def detect_file(filename, model):
+def detect_file(filename, model, unet):
     data = nib.load(filename)
     mask = nib.load(filename)
     mask_roi = nib.load(filename)
 
     width, height, frame_num = data.shape
     matrix = data.get_data()
+    bet_matrix = bet_unet(matrix, unet, threshold=0.2)
 
     start = time.time()
     for i in tqdm(range(frame_num), desc='Detect in {}'.format(os.path.basename(filename))):
         img = matrix[:, :, i]
-        selected, mask_ROI = detect(img, model)
+        bet = bet_matrix[:, :, i]
+        selected, mask_ROI = detect(img, model, bet)
         mask.get_data()[:, :, i] = selected
         mask_roi.get_data()[:, :, i] = mask_ROI
     end = time.time()
@@ -32,9 +34,9 @@ def detect_file(filename, model):
     return mask, mask_roi
 
 
-def detect(img, model, pad=config.pad, is_debug=False):
+def detect(img, model, bet, pad=config.pad, is_debug=False):
     width, height = img.shape
-    mask_ROI = np.uint8(unet_predict(img, threshold=0.01, model_name='unet_pm25.hdf5'))
+    mask_ROI = bet
     num, labels, stats, centroid = cv2.connectedComponentsWithStats(
         mask_ROI, connectivity=8)
     selected = np.zeros_like(img)
@@ -77,16 +79,18 @@ if __name__ == '__main__':
     data_filename = args.input
     data_path = os.path.join(data_root, data_filename)
 
-    result_filename = args.output if args.output else '{}_detect_heatmap.nii'.format(
+    result_filename = args.output if args.output else '{}_detect_by_heatmap.nii'.format(
         data_filename.split('/')[-1].split('.')[-2])
 
     result_path = os.path.join(result_path, result_filename)
 
     model_name = args.model
-    model_path = os.path.join(model_path, model_name)
-    model = load_model(model_path)
+    unet_path = os.path.join(model_path, 'unet_pm25.hdf5')
+    clf_path = os.path.join(model_path, model_name)
+    bet_net = unet(pretrained_weights=unet_path)
+    model = load_model(clf_path)
 
-    mask, mask_roi = detect_file(data_path, model)
+    mask, mask_roi = detect_file(data_path, model, bet_net)
 
     nib.save(mask, result_path)
-    nib.save(mask_roi, './mask/roi_heatmap.nii')
+    nib.save(mask_roi, './mask/roi_by_heatmap.nii')

@@ -52,13 +52,9 @@ def crop_from_img(img, mask, pad, is_debug=False):
 
 
 # propose region from image
-def propose_region(img, unet=None, is_debug=False):
+def propose_region(img, is_debug=False):
     img = np.uint8(img)
     mask = np.zeros_like(img)
-    # BET
-    if unet:
-        bet = unet_predict(img, unet, threshold=0.2)
-        bet = np.uint8(bet)
 
     # Adaptive Threshold
     threshold = cv2.adaptiveThreshold(
@@ -89,10 +85,8 @@ def propose_region(img, unet=None, is_debug=False):
     if is_debug:
         plt.imshow(vh_img, cmap='bone')
 
-    if unet:
-        return threshold & bet & mask & (~vh_img)
-    else:
-        return threshold & mask & (~vh_img)
+    m = threshold & mask & (~vh_img)
+    return m
 
 
 # generate dataset from file list
@@ -140,12 +134,13 @@ def unet_predict(img, model, threshold=0.5):
     r[res > threshold] = 1
 
     # mask
-    return resize_img(r, (w, h))
+    mask = resize_img(r, (w, h))
+    return np.array(mask, dtype=np.uint8)
 
 
 # unet batch predict
 def unet_batch_predict(img_batch, model, threshold=0.5):
-    # img_batch: [batch w, h]
+    # img_batch: [batch h, w]
     batch, h, w = img_batch.shape
     crop_batch = []
     for img in img_batch:
@@ -160,6 +155,14 @@ def unet_batch_predict(img_batch, model, threshold=0.5):
     r_batch = np.zeros_like(res)
     r_batch[res > threshold] = 1
 
-    # mask_batch: [batch, w, h]
+    # mask_batch: [batch, h, w]
     mask_batch = [resize_img(r, (w, h)) for r in r_batch]
-    return mask_batch
+    return np.array(mask_batch, dtype=np.uint8)
+
+
+# BET a matrix (h, w, n) with unet
+def bet_unet(matrix, model, threshold=0.5):
+    img_batch = np.transpose(matrix, (2, 0, 1))
+    mask_batch = unet_batch_predict(img_batch, model, threshold)
+    bet_matrix = np.transpose(mask_batch, (1, 2, 0))
+    return bet_matrix

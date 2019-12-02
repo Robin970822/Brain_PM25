@@ -12,7 +12,7 @@ import config
 import argparse
 
 
-def detect_file(filename, model, pad=config.pad, is_debug=False):
+def detect_file(filename, model):
     data = nib.load(filename)
     mask = nib.load(filename)
     mask_roi = nib.load(filename)
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--input', help='input path')
     parser.add_argument('-o', '--output', help='output path')
     parser.add_argument('-m', '--model', help='model path',
-                        default='CNN_h3_e1500.h5')
+                        default='CNN_p10_e2000.h5')
     args = parser.parse_args()
 
     data_filename = args.input

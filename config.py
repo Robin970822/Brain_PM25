@@ -29,3 +29,5 @@ def get_path(root=data_root, path='model'):
 model_path = get_path(path='model')
 image_path = get_path(path='image')
 result_path = get_path(path='result')
+
+bet_path = os.path.join(model_path, 'unet_BET2.hdf5')

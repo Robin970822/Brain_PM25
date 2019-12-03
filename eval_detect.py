@@ -97,7 +97,7 @@ if __name__ == '__main__':
     pred_matrix = predict.get_data()
     gt_matrix = groundtruth.get_data()
 
-    thres = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    thres = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
     print('Calculating IOU...')
     ious_imgwise = [[iou(gt_matrix[:, :, i], pred_matrix[:, :, i], thr)

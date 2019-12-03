@@ -78,8 +78,10 @@ if __name__ == '__main__':
         '-p', '--predict', help='predict for detection', default='0710_094_by_bet.nii')
     parser.add_argument('-g', '--groundtruth',
                         help='ground truth for detection', default='07-094.nii')
+    parser.add_argument('-m', '--method', help='detection method', default='U-net BET & CNN classifer')
     args = parser.parse_args()
 
+    method = args.method
     # predict and ground truth path
     predict_path = args.predict
     predict_path = os.path.join(result_path, predict_path)
@@ -106,13 +108,13 @@ if __name__ == '__main__':
     color = dict(boxes='DarkGreen', whiskers='DarkOrange',
                  medians='DarkBlue', caps='Gray')
     df.plot.box(grid=True, color=color,
-                title='IOU @threshold with U-net BET & CNN classifer')
+                title='IOU @threshold with {}'.format(method))
     plt.xlabel('Threshold')
     plt.ylabel('IOU')
 
     plt.figure()
     plt.plot(thres, ious_brainwise, color='DarkBlue')
-    plt.title('IOU @threshold with U-net BET & CNN classifer')
+    plt.title('IOU @threshold with {}'.format(method))
     plt.xlabel('Threshold')
     plt.ylabel('IOU')
     plt.grid()
@@ -124,7 +126,7 @@ if __name__ == '__main__':
     recall = p[:, 1]
     plt.figure()
     plt.plot(recall, precision, color='DarkBlue')
-    plt.title('P-R with U-net BET & CNN classifer')
+    plt.title('P-R with {}'.format(method))
     plt.xlabel('Recall')
     plt.ylabel('Precison')
     plt.grid()
@@ -139,7 +141,7 @@ if __name__ == '__main__':
     color = dict(boxes='DarkGreen', whiskers='DarkOrange',
                  medians='DarkBlue', caps='Gray')
     precs_df.plot.box(grid=True, color=color,
-                      title='Precision @threshold with U-net BET & CNN classifer')
+                      title='Precision @threshold with {}'.format(method))
     plt.xlabel('Threshold')
     plt.ylabel('Precision')
 
@@ -147,7 +149,7 @@ if __name__ == '__main__':
     color = dict(boxes='DarkGreen', whiskers='DarkOrange',
                  medians='DarkBlue', caps='Gray')
     recalls_df.plot.box(
-        grid=True, color=color, title='Recall @threshold with U-net BET & CNN classifer')
+        grid=True, color=color, title='Recall @threshold with {}'.format(method))
     plt.xlabel('Threshold')
     plt.ylabel('Recall')
     plt.show()

@@ -19,7 +19,7 @@ def detect_file(filename, model, unet):
 
     width, height, frame_num = data.shape
     matrix = data.get_data()
-    bet_matrix = bet_unet(matrix, unet)
+    bet_matrix = np.uint8(bet_unet(matrix, unet))
 
     start = time.time()
     for i in tqdm(range(frame_num), desc='Detect in {}'.format(os.path.basename(filename))):

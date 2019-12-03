@@ -30,6 +30,9 @@ if method == 'bet':
 elif method == 'heatmap':
     method_path = os.path.join(model_path, 'unet_pm25.hdf5')
     from detect_by_heatmap import detect_file
+elif method == 'unet':
+    method_path = os.path.join(model_path, 'unet_pm25.hdf5')
+    from detect_by_unet import detect_file
 method_net = unet(pretrained_weights=method_path)
 
 input_path = os.path.join(data_root, args.input)

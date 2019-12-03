@@ -135,7 +135,7 @@ def unet_predict(img, model, threshold=0.5):
 
     # mask
     mask = resize_img(r, (w, h))
-    return np.array(mask, dtype=np.uint8)
+    return mask
 
 
 # unet batch predict
@@ -152,12 +152,15 @@ def unet_batch_predict(img_batch, model, threshold=0.5):
     # predict res
     res = model.predict_on_batch(crop_batch)
     res = np.squeeze(res)
-    r_batch = np.zeros_like(res)
-    r_batch[res > threshold] = 1
+    if threshold >= 0:
+        r_batch = np.zeros_like(res)
+        r_batch[res > threshold] = 1
+    else:
+        r_batch = res.copy()
 
     # mask_batch: [batch, h, w]
     mask_batch = [resize_img(r, (w, h)) for r in r_batch]
-    return np.array(mask_batch, dtype=np.uint8)
+    return mask_batch
 
 
 # BET a matrix (h, w, n) with unet

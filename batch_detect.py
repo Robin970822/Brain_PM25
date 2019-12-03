@@ -32,7 +32,6 @@ elif method == 'heatmap':
     from detect_by_heatmap import detect_file
 method_net = unet(pretrained_weights=method_path)
 
-
 input_path = os.path.join(data_root, args.input)
 
 NII_fileList = []

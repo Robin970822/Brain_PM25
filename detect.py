@@ -57,8 +57,9 @@ def detect(img, model, bet, pad=config.pad, is_debug=False):
         slice_img = img[cy - pad: cy + pad, cx - pad: cx + pad]
         slice_img = slice_img[:, :, np.newaxis]
         slice_img = np.expand_dims(slice_img, axis=0)
-        if np.argmax(model.predict(slice_img)) == 1:
-            selected[labels == i] = 1
+        res = model.predict(slice_img)
+        if np.argmax(res) == 1:
+            selected[labels == i] = np.max(res)
             if is_debug:
                 print('label:{}, center:({},{})'.format(i, cx, cy))
     return selected, mask_ROI

@@ -37,11 +37,16 @@ python eval.py -m [model_path]
 - model_path:   验证模型路径
 
 ## 验证检测结果
+```shell
+python eval_detect.py -p [predict] -g [groudtruth] -m [method]
+```
 
-TODO
+- predict:      预测结果
+- groundtruth:  标签
+- method:       使用方法
 
 ## 检测PM2.5
-```
+```shell
 python detect.py -i [input] -o [output] -m [model]
 ```
 - input:    输入数据
@@ -49,7 +54,7 @@ python detect.py -i [input] -o [output] -m [model]
 - model:    模型
 
 ## 批量检测PM2.5
-```
+```shell
 python batch_detect.py -i [input] -m [model]
 ```
 - input:    输入数据
@@ -70,6 +75,46 @@ python batch_detect.py -i [input] -m [model]
 |CNN_p10_e2000_balanced_2.h5|Pos: 1500 Neg: 3000|Pos: 0.9157 Neg: 0.9033|2000|
 
 ## 检测结果
+
+### 形态学检测
+
+**IOU**
+
+![IOU](img\iou with unet bet cnn clf.png)
+
+![IOU](img\iou with unet bet cnn clf brainwise.png)
+
+**P-R curve**
+
+![P-R curve](img\pr with unet bet cnn clf brainwise.png)
+
+**Precision**
+
+![Precision](img\precision with unet bet cnn clf.png)
+
+**Recall**
+
+![Recall](img\recall with unet bet cnn clf.png)
+
+### Unet检测
+
+**IOU**
+
+![IOU](img\iou with unet.png)
+
+![IOU](img\iou with unet brainwise.png)
+
+**P-R curve**
+
+![P-R curve](img\pr with unet brainwise.png)
+
+**Precision**
+
+![Precision](img\precision with unet.png)
+
+**Recall**
+
+![Recall](img\recall with unet.png)
 
 
 # DICOM格式文件

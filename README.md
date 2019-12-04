@@ -80,41 +80,61 @@ python batch_detect.py -i [input] -m [model]
 
 **IOU**
 
-![IOU](img\iou with unet bet cnn clf.png)
+![IOU](img/iou with unet bet cnn clf.png)
 
-![IOU](img\iou with unet bet cnn clf brainwise.png)
+![IOU](img/iou with unet bet cnn clf brainwise.png)
 
 **P-R curve**
 
-![P-R curve](img\pr with unet bet cnn clf brainwise.png)
+![P-R curve](img/pr with unet bet cnn clf brainwise.png)
 
 **Precision**
 
-![Precision](img\precision with unet bet cnn clf.png)
+![Precision](img/precision with unet bet cnn clf.png)
 
 **Recall**
 
-![Recall](img\recall with unet bet cnn clf.png)
+![Recall](img/recall with unet bet cnn clf.png)
 
 ### Unet检测
 
 **IOU**
 
-![IOU](img\iou with unet.png)
+![IOU](img/iou with unet.png)
 
-![IOU](img\iou with unet brainwise.png)
+![IOU](img/iou with unet brainwise.png)
 
 **P-R curve**
 
-![P-R curve](img\pr with unet brainwise.png)
+![P-R curve](img/pr with unet brainwise.png)
 
 **Precision**
 
-![Precision](img\precision with unet.png)
+![Precision](img/precision with unet.png)
 
 **Recall**
 
-![Recall](img\recall with unet.png)
+![Recall](img/recall with unet.png)
+
+### Unet Heatmap 检测
+
+**IOU**
+
+![IOU](img/iou with heatmap cnn clf.png)
+
+![IOU](img/iou with heatmap cnn clf brainwise.png)
+
+**P-R curve**
+
+![P-R curve](img/pr with heatmap cnn clf brainwise.png)
+
+**Precision**
+
+![Precision](img/precision with heatmap cnn clf.png)
+
+**Recall**
+
+![Recall](img/recall with heatmap cnn clf.png)
 
 
 # DICOM格式文件

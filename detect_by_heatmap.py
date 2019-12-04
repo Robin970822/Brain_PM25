@@ -86,7 +86,7 @@ if __name__ == '__main__':
     result_path = os.path.join(result_path, result_filename)
 
     model_name = args.model
-    unet_path = os.path.join(model_path, 'unet_pm25.hdf5')
+    unet_path = os.path.join(model_path, 'unet_pm25_yuzq.hdf5')
     clf_path = os.path.join(model_path, model_name)
     bet_net = unet(pretrained_weights=unet_path)
     model = load_model(clf_path)

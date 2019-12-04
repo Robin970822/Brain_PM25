@@ -16,7 +16,7 @@ def detect_file(filename, model, unet):
 
     width, height, frame_num = data.shape
     matrix = data.get_data()
-    unet_matrix = bet_unet(matrix, unet, threshold=-1)
+    unet_matrix = bet_unet(matrix, unet, threshold=0.2)
 
     start = time.time()
     for i in tqdm(range(frame_num), desc='Detect in {}'.format(os.path.basename(filename))):
@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     result_path = os.path.join(result_path, result_filename)
 
-    unet_path = os.path.join(model_path, 'unet_pm25.hdf5')
+    unet_path = os.path.join(model_path, 'unet_pm25_yuzq.hdf5')
     bet_net = unet(pretrained_weights=unet_path)
 
     mask, mask_roi = detect_file(data_path, None, bet_net)

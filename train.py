@@ -59,8 +59,8 @@ pad = config.pad
 if args.input:
     model = load_model(args.input)
 else:
-    model = get_model(input_shape=(2*pad, 2*pad), output_shape=2,
-                      model_type=args.model)
+    model = get_model(input_shape=(2 * pad, 2 * pad),
+                      output_shape=2, model_type=args.model)
 # Train
 print('Trainging...')
 

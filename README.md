@@ -55,10 +55,29 @@ python detect.py -i [input] -o [output] -m [model]
 
 ## 批量检测PM2.5
 ```shell
-python batch_detect.py -i [input] -m [model]
+python batch_detect.py -i [input] -m [model] -b [method]
 ```
 - input:    输入数据
 - model:    模型
+- method:   方法
+
+# Run an example
+
+## 检测PM2.5
+```shell
+python detect_example.py -i [input] -o [output] -m [model]
+```
+- input:    输入数据
+- output:   输出预测
+- model:    模型
+
+## 批量检测PM2.5
+```shell
+python batch_detect_example.py -i [input] -m [model] -b [method]
+```
+- input:    输入数据
+- model:    模型
+- method:   方法
 
 # 实验结果
 ## 分类结果
@@ -135,7 +154,6 @@ python batch_detect.py -i [input] -m [model]
 **Recall**
 
 ![Recall](img/recall with heatmap cnn clf.png)
-
 
 # DICOM格式文件
 

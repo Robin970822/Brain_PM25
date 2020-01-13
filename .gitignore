@@ -1,11 +1,12 @@
 .idea/*
+.ipynb_checkpoints/*
 data/*
 image/*
 mask/*
 test_code/*
 __pycache__/*
 
-*.nii
+
 *.sh
 *.json
 *.pyc

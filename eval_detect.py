@@ -1,4 +1,3 @@
-import config
 import os
 import cv2
 import argparse
@@ -69,6 +68,7 @@ def mAP(gt_matrix, pred_matrix, frame_num, threshold=0.1):
 
 
 if __name__ == '__main__':
+    import config
     data_root = config.data_root
     result_path = config.result_path
 

@@ -8,7 +8,6 @@ import nibabel as nib
 import cv2
 import os
 import time
-import config
 import argparse
 
 
@@ -34,7 +33,7 @@ def detect_file(filename, model, unet):
     return mask, mask_roi
 
 
-def detect(img, model, bet, pad=config.pad, is_debug=False):
+def detect(img, model, bet, pad=10, is_debug=False):
     width, height = img.shape
     mask_ROI = bet
     num, labels, stats, centroid = cv2.connectedComponentsWithStats(
@@ -66,6 +65,7 @@ def detect(img, model, bet, pad=config.pad, is_debug=False):
 
 
 if __name__ == '__main__':
+    import config
     data_root = config.data_root
     model_path = config.model_path
     result_path = config.result_path

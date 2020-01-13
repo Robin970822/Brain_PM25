@@ -47,5 +47,5 @@ for file in tqdm(NII_fileList, desc='Detect in {}'.format(os.path.abspath(input_
     filename = os.path.basename(file)
     output_name = '{}_detect_by_{}.nii'.format(filename.split('.')[-2], method)
     output_path = os.path.join(result_path, output_name)
-    mask, _ = detect_file(file, model, method_net)
+    mask, _ = detect_file(file, model, method_net, pad=10)
     nib.save(mask, output_path)

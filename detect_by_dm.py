@@ -7,11 +7,10 @@ import nibabel as nib
 import cv2
 import os
 import time
-import config
 import argparse
 
 
-def detect_file(filename, model, distant_map, pad=config.pad, is_debug=False):
+def detect_file(filename, model, distant_map, pad=10, is_debug=False):
     data = nib.load(filename)
     mask = nib.load(filename)
     mask_roi = nib.load(filename)
@@ -32,7 +31,7 @@ def detect_file(filename, model, distant_map, pad=config.pad, is_debug=False):
     return mask, mask_roi
 
 
-def detect(img, model, dm, pad=config.pad, is_debug=False):
+def detect(img, model, dm, pad=10, is_debug=False):
     width, height = img.shape
 
     thres = 0.95
@@ -69,6 +68,7 @@ def detect(img, model, dm, pad=config.pad, is_debug=False):
 
 
 if __name__ == '__main__':
+    import config
     data_root = config.data_root
     model_path = config.model_path
     result_path = config.result_path

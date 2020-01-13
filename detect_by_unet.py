@@ -5,7 +5,6 @@ import nibabel as nib
 
 import os
 import time
-import config
 import argparse
 
 
@@ -30,6 +29,7 @@ def detect_file(filename, model, unet):
 
 
 if __name__ == '__main__':
+    import config
     data_root = config.data_root
     model_path = config.model_path
     result_path = config.result_path

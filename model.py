@@ -1,12 +1,13 @@
 # encoding=utf-8
 import tensorflow as tf
 from keras.models import Model, Sequential
-from keras.layers import Input, BatchNormalization
+from keras.layers import Input, BatchNormalization, Layer, UpSampling2D, Multiply
 from keras.layers.core import Dropout, Lambda, Flatten, Dense
 from keras.layers.convolutional import Conv2D, Conv2DTranspose
 from keras.layers.pooling import MaxPooling2D
 from keras.layers.merge import concatenate
 from keras.optimizers import Adam
+from keras.activations import relu
 from keras import backend as K
 
 
@@ -62,6 +63,34 @@ def get_model(input_shape, output_shape, model_type='FC'):
 
 def load_model(model_path):
     return tf.keras.models.load_model(model_path)
+
+
+# AttentionGate
+class AttentionGate(Layer):
+    """docstring for ClassName"""
+
+    def __init__(self, output_dim, **kwargs):
+        super(AttentionGate, self).__init__(**kwargs)
+        self.output_dim = output_dim
+
+    def build(self, input_shape):
+        super(AttentionGate, self).build(input_shape)
+
+    def call(self, x):
+        assert isinstance(x, list)
+        g, x = x
+        x_ = Conv2D(self.output_dim, (1, 1))(x)
+        x_ = MaxPooling2D((2, 2))(x_)
+        g_ = Conv2D(self.output_dim, (1, 1))(g)
+        g_ = relu(x_ + g_)
+        g_ = Conv2D(1, (1, 1), activation='sigmoid')(g_)
+        a = UpSampling2D((2, 2), interpolation='bilinear')(g_)
+        return a
+
+    def compute_output_shape(self, input_shape):
+        assert isinstance(input_shape, list)
+        shape_g, shape_x = input_shape
+        return shape_x
 
 
 # Metric function
@@ -165,6 +194,97 @@ def unet(IMG_WIDTH=224, IMG_HEIGHT=160, IMG_CHANNELS=1, pretrained_weights=False
 
     u8 = Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same')(c7)
     u8 = concatenate([u8, c2])
+    c8 = Conv2D(32, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(u8)
+    c8 = Dropout(0.1)(c8)
+    c8 = Conv2D(32, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c8)
+
+    u9 = Conv2DTranspose(16, (2, 2), strides=(2, 2), padding='same')(c8)
+    # Got inputs shapes: [(None, 224, 192, 16), (None, 225, 192, 16)]。估计225奇数不方便处理
+    u9 = concatenate([u9, c1], axis=3)
+    c9 = Conv2D(16, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(u9)
+    c9 = Dropout(0.1)(c9)
+    c9 = Conv2D(16, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c9)
+
+    outputs = Conv2D(1, (1, 1), activation='sigmoid')(c9)
+
+    model = Model(inputs=[inputs], outputs=[outputs])
+    # model.compile(optimizer='adam',loss='binary_crossentropy', metrics=[dice_coef])
+    model.compile(optimizer=Adam(lr=1e-4),
+                  loss=[focal_loss], metrics=[dice_coef])
+
+    if (pretrained_weights):
+        model.load_weights(pretrained_weights)
+
+    return model
+
+
+# unet with attention gate
+# 默认值参数，调用时赋值可更改
+def aunet(IMG_WIDTH=224, IMG_HEIGHT=160, IMG_CHANNELS=1, pretrained_weights=False):
+    inputs = Input((IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS))
+    s = Lambda(lambda x: x / 255)(inputs)  # 将任意表达式封装为 Layer 对象。除以255.
+    # keras.initializers.he_normal(seed=None)   Keras层的初始随机权重
+    c1 = Conv2D(16, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(s)
+    c1 = Dropout(0.1)(c1)
+    c1 = Conv2D(16, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c1)
+    p1 = MaxPooling2D((2, 2))(c1)
+    c2 = Conv2D(32, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(p1)
+    c2 = Dropout(0.1)(c2)
+    c2 = Conv2D(32, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c2)
+    p2 = MaxPooling2D((2, 2))(c2)
+
+    c3 = Conv2D(64, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(p2)
+    c3 = Dropout(0.2)(c3)
+    c3 = Conv2D(64, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c3)
+    p3 = MaxPooling2D((2, 2))(c3)
+
+    c4 = Conv2D(128, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(p3)
+    c4 = Dropout(0.2)(c4)
+    c4 = Conv2D(128, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c4)
+    p4 = MaxPooling2D(pool_size=(2, 2))(c4)
+
+    c5 = Conv2D(256, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(p4)
+    c5 = Dropout(0.3)(c5)
+    c5 = Conv2D(256, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c5)
+
+    a6 = AttentionGate(128, name='a6')([c5, c4])
+    a6 = Multiply()([c4, a6])
+    u6 = Conv2DTranspose(128, (2, 2), strides=(2, 2), padding='same')(c5)
+    u6 = concatenate([u6, a6])
+    c6 = Conv2D(128, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(u6)
+    c6 = Dropout(0.2)(c6)
+    c6 = Conv2D(128, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c6)
+
+    a7 = AttentionGate(64, name='a7')([c6, c3])
+    a7 = Multiply()([c3, a7])
+    u7 = Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same')(c6)
+    u7 = concatenate([u7, a7])
+    c7 = Conv2D(64, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(u7)
+    c7 = Dropout(0.2)(c7)
+    c7 = Conv2D(64, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c7)
+
+    a8 = AttentionGate(32, name='a8')([c7, c2])
+    a8 = Multiply()([c2, a8])
+    u8 = Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same')(c7)
+    u8 = concatenate([u8, a8])
     c8 = Conv2D(32, (3, 3), activation='elu',
                 kernel_initializer='he_normal', padding='same')(u8)
     c8 = Dropout(0.1)(c8)

@@ -33,6 +33,8 @@ elif method == 'heatmap':
 elif method == 'unet':
     method_path = os.path.join(model_path, 'unet_pm25_yuzq.hdf5')
     from detect_by_unet import detect_file
+elif method == 'aunet':
+    method_path = os.path.join(model_path, 'unet_att_500.hdf5')
 method_net = unet(pretrained_weights=method_path)
 
 input_path = os.path.join(data_root, args.input)

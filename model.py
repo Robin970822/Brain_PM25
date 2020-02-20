@@ -1,7 +1,7 @@
 # encoding=utf-8
 import tensorflow as tf
 from keras.models import Model, Sequential
-from keras.layers import Input, BatchNormalization, Layer, UpSampling2D, Multiply
+from keras.layers import Input, BatchNormalization, Layer, UpSampling2D, Multiply, GlobalMaxPooling2D
 from keras.layers.core import Dropout, Lambda, Flatten, Dense
 from keras.layers.convolutional import Conv2D, Conv2DTranspose
 from keras.layers.pooling import MaxPooling2D
@@ -311,3 +311,61 @@ def aunet(IMG_WIDTH=224, IMG_HEIGHT=160, IMG_CHANNELS=1, pretrained_weights=Fals
         model.load_weights(pretrained_weights)
 
     return model
+
+
+# 函数名原 get_unet 改为 unet
+# 默认值参数，调用时赋值可更改
+def regression_net(IMG_WIDTH=224, IMG_HEIGHT=160, IMG_CHANNELS=1, pretrained_weights=False):
+    inputs = Input((IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS))
+    s = Lambda(lambda x: x / 255)(inputs)  # 将任意表达式封装为 Layer 对象。除以255.
+    # keras.initializers.he_normal(seed=None)   Keras层的初始随机权重
+    c1 = Conv2D(16, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(s)
+    c1 = Dropout(0.1)(c1)
+    c1 = Conv2D(16, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c1)
+    p1 = MaxPooling2D((2, 2))(c1)#(80, 112)
+
+    c2 = Conv2D(32, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(p1)
+    c2 = Dropout(0.1)(c2)
+    c2 = Conv2D(32, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c2)
+    p2 = MaxPooling2D((2, 2))(c2)#(40, 56)
+
+    c3 = Conv2D(64, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(p2)
+    c3 = Dropout(0.2)(c3)
+    c3 = Conv2D(64, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c3)
+    p3 = MaxPooling2D((2, 2))(c3)#(20, 28)
+
+    c4 = Conv2D(128, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(p3)
+    c4 = Dropout(0.2)(c4)
+    c4 = Conv2D(128, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c4)
+    p4 = MaxPooling2D((2, 2))(c4)#(10, 14)
+
+    c5 = Conv2D(256, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(p4)
+    c5 = Dropout(0.3)(c5)
+    c5 = Conv2D(256, (3, 3), activation='elu',
+                kernel_initializer='he_normal', padding='same')(c5)
+    p5 = MaxPooling2D((2, 2))(c5)#(5, 7)
+    g5 = GlobalMaxPooling2D()(p5)
+
+    f6 = Dense(2048, activation='relu')(g5)
+    f7 = Dense(2048, activation='relu')(f6)
+
+    outputs = Dense(1, name='output')(f7)
+
+    model = Model(inputs=[inputs], outputs=[outputs])
+    # model.compile(optimizer='adam',loss='binary_crossentropy', metrics=[dice_coef])
+    model.compile(optimizer='adadelta', loss='mse', metrics=['mae', 'mse'])
+
+    if (pretrained_weights):
+        model.load_weights(pretrained_weights)
+
+    return model
+

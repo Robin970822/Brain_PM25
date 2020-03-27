@@ -8,9 +8,18 @@ def min_max_scaler(a):
     return (a - np.min(a)) / (np.max(a) - np.min(a))
 
 
-# crop roi for unet prediction
+# crop roi for unet prediction value (0, 1)
 def crop_roi(img):
+    img = np.uint16(img)
     test_img = np.rot90(min_max_scaler(img))
+    crop_img = test_img[130:130 + 160, 50:50 + 224]
+    crop_img = np.uint8(crop_img * 255) / 255
+    return crop_img
+
+
+# crop roi for distant map
+def crop_roi_without_scaler(img):
+    test_img = np.rot90(img)
     crop_img = test_img[130:130 + 160, 50:50 + 224]
     return crop_img
 
